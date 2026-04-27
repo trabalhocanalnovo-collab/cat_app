@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álcool: Prazer Momentâneo, Consequências Reais</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #04080f;
+    --bg2: #080d18;
+    --blue-deep: #0a1628;
+    --blue-mid: #0e2044;
+    --blue-accent: #1a3a6e;
+    --neon: #4a9eff;
+    --neon-dim: #1e5ba8;
+    --white: #e8edf5;
+    --white-dim: #8fa3bf;
+    --gold: #c8a96e;
+    --red: #c0392b;
+    --red-soft: #e74c3c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--neon-dim); border-radius: 2px; }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 2rem;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #0d2240 0%, var(--bg) 70%);
+    overflow: hidden;
+  }
+
+  #hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--bg));
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(74,158,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74,158,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPan 20s linear infinite;
+  }
+
+  @keyframes gridPan {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .orb1 { width: 500px; height: 500px; background: rgba(14,32,68,0.8); top: -100px; left: -150px; }
+  .orb2 { width: 400px; height: 400px; background: rgba(26,58,110,0.5); bottom: -50px; right: -100px; }
+  .orb3 { width: 200px; height: 200px; background: rgba(74,158,255,0.12); top: 30%; left: 50%; transform: translateX(-50%); }
+
+  .hero-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--neon);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 10vw, 8rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+
+  .hero-title .line-accent {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(74,158,255,0.5);
+    display: block;
+  }
+
+  .hero-title .line-solid {
+    color: var(--white);
+    display: block;
+  }
+
+  .hero-sub {
+    margin-top: 2rem;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--white-dim);
+    position: relative; z-index: 1;
+    animation: fadeUp 1s 0.4s ease both;
+    max-width: 480px;
+  }
+
+  .hero-sub span { color: var(--neon); font-style: normal; font-weight: 500; }
+
+  .btn-explore {
+    margin-top: 3rem;
+    padding: 1rem 3rem;
+    background: transparent;
+    border: 1px solid rgba(74,158,255,0.4);
+    color: var(--neon);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative; z-index: 1;
+    animation: fadeUp 1s 0.6s ease both;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+
+  .btn-explore:hover {
+    background: rgba(74,158,255,0.1);
+    border-color: var(--neon);
+    box-shadow: 0 0 30px rgba(74,158,255,0.2);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .divider {
+    max-width: 900px;
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(74,158,255,0.2), transparent);
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    color: var(--neon);
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: 0.02em;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    line-height: 1;
+  }
+
+  .section-body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--white-dim);
+    font-weight: 300;
+    max-width: 680px;
+  }
+
+  /* ── IMPACT PHRASE ── */
+  .impact-phrase {
+    margin-top: 2.5rem;
+    padding: 1.5rem 2rem;
+    border-left: 3px solid var(--neon);
+    background: linear-gradient(to right, rgba(74,158,255,0.06), transparent);
+    position: relative;
+  }
+
+  .impact-phrase::before {
+    content: '"';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: var(--neon);
+    opacity: 0.15;
+    position: absolute;
+    top: -1rem;
+    left: 1rem;
+    line-height: 1;
+  }
+
+  .impact-phrase p {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── CARDS GRID ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+    background: rgba(14,32,68,0.4);
+    border: 1px solid rgba(74,158,255,0.1);
+    transition: border-color 0.3s, background 0.3s;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+
+  .card:hover {
+    border-color: rgba(74,158,255,0.3);
+    background: rgba(14,32,68,0.7);
+  }
+
+  .card-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+  .card-title { font-weight: 500; font-size: 0.9rem; color: var(--white); margin-bottom: 0.4rem; }
+  .card-text { font-size: 0.85rem; color: var(--white-dim); line-height: 1.6; }
+
+  /* ── STAT BLOCKS ── */
+  .stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .stat {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 1.5rem;
+    border: 1px solid rgba(74,158,255,0.1);
+    background: rgba(10,22,40,0.5);
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--neon);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--white-dim);
+    margin-top: 0.3rem;
+    font-weight: 300;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    margin-top: 2.5rem;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--neon), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.4rem;
+    top: 0.35rem;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--neon);
+    box-shadow: 0 0 10px var(--neon);
+  }
+
+  .timeline-step {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--neon);
+    opacity: 0.6;
+    margin-bottom: 0.2rem;
+  }
+
+  .timeline-title {
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+
+  .timeline-text {
+    font-size: 0.9rem;
+    color: var(--white-dim);
+    line-height: 1.6;
+  }
+
+  /* ── WARNING BOX ── */
+  .warning-box {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.25);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .warning-text { font-size: 0.95rem; color: #e8a09a; line-height: 1.6; }
+
+  /* ── FINAL SECTION ── */
+  #final {
+    min-height: 60vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 5rem 2rem;
+    background: radial-gradient(ellipse 70% 50% at 50% 50%, #0d2240 0%, var(--bg) 70%);
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  #final.visible { opacity: 1; transform: translateY(0); }
+
+  .final-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    line-height: 1.15;
+    max-width: 700px;
+    color: var(--white);
+    margin-bottom: 2rem;
+  }
+
+  .final-title em {
+    font-style: normal;
+    color: var(--neon);
+  }
+
+  .final-sub {
+    font-size: 1rem;
+    color: var(--white-dim);
+    font-weight: 300;
+    max-width: 500px;
+    line-height: 1.7;
+  }
+
+  .help-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+
+  .help-link {
+    padding: 0.8rem 2rem;
+    border: 1px solid rgba(74,158,255,0.3);
+    color: var(--neon);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+
+  .help-link:hover {
+    background: rgba(74,158,255,0.1);
+    border-color: var(--neon);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--neon-dim), var(--neon));
+    z-index: 100;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* ── NAV DOTS ── */
+  .nav-dots {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    z-index: 50;
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(74,158,255,0.2);
+    transition: all 0.3s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .nav-dot.active {
+    background: var(--neon);
+    box-shadow: 0 0 8px var(--neon);
+    height: 20px;
+    border-radius: 3px;
+  }
+
+  /* ── QUIZ ── */
+  .quiz-wrap {
+    margin-top: 2.5rem;
+    background: rgba(14,32,68,0.3);
+    border: 1px solid rgba(74,158,255,0.15);
+    padding: 2rem;
+  }
+
+  .quiz-q {
+    font-size: 1.05rem;
+    color: var(--white);
+    font-weight: 400;
+    margin-bottom: 1.2rem;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .quiz-option {
+    background: transparent;
+    border: 1px solid rgba(74,158,255,0.2);
+    color: var(--white-dim);
+    padding: 0.8rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.25s;
+  }
+
+  .quiz-option:hover { border-color: var(--neon); color: var(--white); background: rgba(74,158,255,0.07); }
+  .quiz-option.correct { border-color: #2ecc71; color: #2ecc71; background: rgba(46,204,113,0.08); }
+  .quiz-option.wrong { border-color: var(--red-soft); color: var(--red-soft); background: rgba(231,76,60,0.08); }
+
+  .quiz-feedback {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--white-dim);
+    display: none;
+    line-height: 1.6;
+  }
+
+  .quiz-feedback.show { display: block; }
+
+  .quiz-next {
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid rgba(74,158,255,0.3);
+    color: var(--neon);
+    padding: 0.6rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: none;
+    transition: all 0.25s;
+  }
+
+  .quiz-next.show { display: inline-block; }
+  .quiz-next:hover { background: rgba(74,158,255,0.1); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: rgba(143,163,191,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 600px) {
+    .nav-dots { display: none; }
+    .stats { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-orb orb3"></div>
+  <div class="hero-label">Conscientização · Saúde · Futuro</div>
+  <h1 class="hero-title">
+    <span class="line-accent">Prazer Momentâneo</span>
+    <span class="line-solid">Consequências Reais</span>
+  </h1>
+  <p class="hero-sub">O que começa <span>leve</span> pode terminar <span>pesado.</span></p>
+  <a href="#cerebro" class="btn-explore">Explorar</a>
+</section>
+
+<!-- ── CÉREBRO ── -->
+<section class="section" id="cerebro" data-label="O Cérebro">
+  <div class="section-number">01 — Neurociência</div>
+  <h2 class="section-title">O que acontece no cérebro</h2>
+  <p class="section-body">O álcool age diretamente no sistema de recompensa cerebral, liberando dopamina e criando uma sensação artificial de prazer. Mas esse mecanismo tem um preço: com o tempo, o cérebro passa a depender da substância para sentir qualquer satisfação, comprometendo o julgamento, a memória e o autocontrole.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">Dopamina</div>
+      <div class="card-text">Pico artificial de prazer que engana o sistema de recompensa.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <div class="card-title">Córtex pré-frontal</div>
+      <div class="card-text">Área responsável por decisões e julgamento — paralisada pelo álcool.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <div class="card-title">Memória</div>
+      <div class="card-text">Formação de memórias prejudicada mesmo com consumo moderado.</div>
+    </div>
+  </div>
+  <div class="impact-phrase"><p>O controle pode acabar antes do copo.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── SAÚDE MENTAL ── -->
+<section class="section" id="mental" data-label="Saúde Mental">
+  <div class="section-number">02 — Psicologia</div>
+  <h2 class="section-title">Saúde mental</h2>
+  <p class="section-body">O álcool é um depressor do sistema nervoso central. Apesar da sensação inicial de relaxamento, ele amplifica ansiedade, depressão e instabilidade emocional a longo prazo. O ciclo é cruel: bebe-se para aliviar — e o alívio cria a necessidade de beber mais.</p>
+  <div class="stats">
+    <div class="stat"><span class="stat-num">2×</span><span class="stat-label">Maior risco de depressão em consumidores frequentes</span></div>
+    <div class="stat"><span class="stat-num">40%</span><span class="stat-label">Dos casos de ansiedade são agravados pelo álcool</span></div>
+    <div class="stat"><span class="stat-num">3×</span><span class="stat-label">Mais chances de desenvolver transtornos de humor</span></div>
+  </div>
+  <div class="impact-phrase"><p>O alívio é momentâneo. As consequências, não.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── CORPO ── -->
+<section class="section" id="corpo" data-label="O Corpo">
+  <div class="section-number">03 — Fisiologia</div>
+  <h2 class="section-title">Impactos no corpo</h2>
+  <p class="section-body">Cada excesso deixa rastros. O fígado — principal órgão de desintoxicação — acumula gordura, inflama e pode evoluir para cirrose. O sistema imunológico enfraquece. A pele envelhece. O coração sofre. O álcool não tem um único órgão-alvo: ele atinge tudo.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🫀</div>
+      <div class="card-title">Coração</div>
+      <div class="card-text">Arritmias, hipertensão e miocardiopatia alcoólica.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🫁</div>
+      <div class="card-title">Fígado</div>
+      <div class="card-text">Esteatose, hepatite alcoólica e cirrose progressiva.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🦴</div>
+      <div class="card-title">Ossos</div>
+      <div class="card-text">Redução da densidade óssea e risco de fraturas.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛡️</div>
+      <div class="card-title">Imunidade</div>
+      <div class="card-text">Sistema imune comprometido, maior vulnerabilidade a doenças.</div>
+    </div>
+  </div>
+  <div class="impact-phrase"><p>Seu corpo lembra de cada excesso.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── TOXICIDADE ── -->
+<section class="section" id="toxicidade" data-label="Toxicidade">
+  <div class="section-number">04 — Toxicologia</div>
+  <h2 class="section-title">Toxicidade</h2>
+  <p class="section-body">O etanol é uma substância tóxica. O corpo não se adapta a ele — ele se deteriora. A cada exposição, há um custo biológico que se acumula silenciosamente. A tolerância crescente não é sinal de resistência: é sinal de dano.</p>
+  <div class="warning-box">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">A Organização Mundial da Saúde classifica o álcool como carcinogênico do Grupo 1 — o mesmo grupo do amianto e do tabaco. Não existe nível "seguro" de consumo quando se fala em câncer.</div>
+  </div>
+  <div class="impact-phrase"><p>O organismo não se acostuma — ele se desgasta.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── DEPENDÊNCIA ── -->
+<section class="section" id="dependencia" data-label="Dependência">
+  <div class="section-number">05 — Progressão</div>
+  <h2 class="section-title">Uso, abuso e dependência</h2>
+  <p class="section-body">Ninguém começa querendo se tornar dependente. A evolução é gradual, muitas vezes invisível. O que começa como uma cerveja no fim de semana pode se tornar uma necessidade diária sem que a pessoa perceba a mudança.</p>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-step">Estágio 01</div>
+      <div class="timeline-title">Uso ocasional</div>
+      <div class="timeline-text">Consumo social, sem consequências imediatas. A tolerância começa a se formar.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-step">Estágio 02</div>
+      <div class="timeline-title">Uso regular</div>
+      <div class="timeline-text">Frequência aumenta. Álcool passa a ser usado para lidar com estresse ou emoções.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-step">Estágio 03</div>
+      <div class="timeline-title">Abuso</div>
+      <div class="timeline-text">Perda de controle sobre quantidade. Consequências começam a aparecer — no trabalho, nas relações, na saúde.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-step">Estágio 04</div>
+      <div class="timeline-title">Dependência</div>
+      <div class="timeline-text">Síndrome de abstinência ao parar. O álcool deixa de ser escolha e se torna necessidade biológica.</div>
+    </div>
+  </div>
+  <div class="impact-phrase"><p>Nem toda dependência começa forte — mas toda começa pequena.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── INFLUÊNCIA SOCIAL ── -->
+<section class="section" id="social" data-label="Influência">
+  <div class="section-number">06 — Cultura</div>
+  <h2 class="section-title">Influência social</h2>
+  <p class="section-body">A indústria do álcool investe bilhões para associar bebida a liberdade, sucesso e pertencimento. Redes sociais amplificam esse discurso com imagens cuidadosamente editadas de festas perfeitas. O que não aparece: os ressacas, as brigas, a vergonha, o vazio.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">📱</div>
+      <div class="card-title">Redes sociais</div>
+      <div class="card-text">Normalização do consumo excessivo como estilo de vida.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📺</div>
+      <div class="card-title">Publicidade</div>
+      <div class="card-text">Associação intencional do álcool a status, prazer e inclusão.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎭</div>
+      <div class="card-title">Cultura pop</div>
+      <div class="card-text">Glorificação do consumo em filmes, séries e músicas.</div>
+    </div>
+  </div>
+  <div class="impact-phrase"><p>Nem toda escolha é totalmente sua.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── PRESSÃO SOCIAL ── -->
+<section class="section" id="pressao" data-label="Pressão">
+  <div class="section-number">07 — Relações</div>
+  <h2 class="section-title">Pressão social</h2>
+  <p class="section-body">O "vai, só uma" esconde um mecanismo de pressão que pode ser mais poderoso que qualquer vício. A necessidade de pertencer, de ser aceito, de não parecer "chato" leva muitas pessoas a beberem contra a própria vontade — e a continuarem por medo de perder o grupo.</p>
+  <div class="impact-phrase"><p>Beber para se encaixar pode te fazer se perder.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── QUIZ ── -->
+<section class="section" id="quiz" data-label="Quiz">
+  <div class="section-number">08 — Reflexão</div>
+  <h2 class="section-title">Teste seus conhecimentos</h2>
+  <p class="section-body">Quanto você realmente sabe sobre os efeitos do álcool? Responda e descubra.</p>
+  <div class="quiz-wrap" id="quizWrap">
+    <p class="quiz-q" id="quizQuestion"></p>
+    <div class="quiz-options" id="quizOptions"></div>
+    <p class="quiz-feedback" id="quizFeedback"></p>
+    <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Próxima pergunta →</button>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- ── FUTURO ── -->
+<section class="section" id="futuro" data-label="Futuro">
+  <div class="section-number">09 — Consequências</div>
+  <h2 class="section-title">Impacto no futuro</h2>
+  <p class="section-body">O álcool não cobra apenas no presente. Ausências no trabalho, queda de rendimento acadêmico, decisões financeiras ruins, relacionamentos destruídos — as consequências se acumulam e constroem um futuro diferente do que poderia ter sido.</p>
+  <div class="stats">
+    <div class="stat"><span class="stat-num">30%</span><span class="stat-label">Queda no desempenho acadêmico em jovens que bebem regularmente</span></div>
+    <div class="stat"><span class="stat-num">5×</span><span class="stat-label">Mais chance de abandono de metas profissionais</span></div>
+  </div>
+  <div class="impact-phrase"><p>Seu futuro não combina com dependência.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── RISCOS IMEDIATOS ── -->
+<section class="section" id="riscos" data-label="Riscos">
+  <div class="section-number">10 — Urgência</div>
+  <h2 class="section-title">Riscos imediatos</h2>
+  <p class="section-body">O perigo não é só de longo prazo. Uma noite de consumo excessivo pode resultar em acidente de trânsito, violência, relação sexual não consentida ou intoxicação grave. Decisões tomadas sob efeito do álcool podem mudar uma vida — para sempre.</p>
+  <div class="warning-box">
+    <div class="warning-icon">🚨</div>
+    <div class="warning-text">O álcool está presente em cerca de 70% dos acidentes de trânsito fatais no Brasil. Uma única decisão errada pode encerrar uma vida — a sua ou a de outra pessoa.</div>
+  </div>
+  <div class="impact-phrase"><p>Uma decisão pode mudar tudo.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── APOIO ── -->
+<section class="section" id="apoio" data-label="Apoio">
+  <div class="section-number">11 — Humanidade</div>
+  <h2 class="section-title">Apoio e acolhimento</h2>
+  <p class="section-body">A dependência não é fraqueza de caráter — é uma doença reconhecida. Quem enfrenta esse problema precisa de acolhimento, não de julgamento. Uma palavra, uma presença, uma escuta atenta podem ser o início de uma transformação real.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🤝</div>
+      <div class="card-title">Escuta ativa</div>
+      <div class="card-text">Ouvir sem julgar é o primeiro passo para ajudar de verdade.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💡</div>
+      <div class="card-title">Informação</div>
+      <div class="card-text">Entender o problema reduz o estigma e aumenta a chance de buscar ajuda.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏥</div>
+      <div class="card-title">Tratamento</div>
+      <div class="card-text">CAPS, CAPS AD e grupos de apoio oferecem suporte gratuito no Brasil.</div>
+    </div>
+  </div>
+  <div class="impact-phrase"><p>Julgar afasta. Compreender transforma.</p></div>
+</section>
+<div class="divider"></div>
+
+<!-- ── CONSCIENTIZAÇÃO ── -->
+<section class="section" id="consciencia" data-label="Consciência">
+  <div class="section-number">12 — Reflexão Final</div>
+  <h2 class="section-title">Conscientização</h2>
+  <p class="section-body">Conhecimento é o início de qualquer mudança. Quando entendemos os mecanismos, os riscos e as forças que moldam nossas escolhas, nos tornamos mais livres — não menos. A consciência não tira o prazer: ela protege o futuro.</p>
+  <div class="impact-phrase"><p>Consciência hoje, proteção amanhã.</p></div>
+</section>
+
+<!-- ── FINAL ── -->
+<section id="final">
+  <div class="final-title">
+    Você não precisa do álcool para ser <em>aceito</em> — mas pode precisar de <em>ajuda</em> para sair dele.
+  </div>
+  <p class="final-sub">Se você ou alguém que você conhece precisa de apoio, existem recursos gratuitos e confidenciais disponíveis.</p>
+  <div class="help-links">
+    <a href="https://www.gov.br/saude/pt-br/assuntos/saude-mental" target="_blank" class="help-link">Saúde Mental Gov.br</a>
+    <a href="https://www.aa.org.br" target="_blank" class="help-link">Alcoólicos Anônimos</a>
+    <a href="tel:188" class="help-link">CVV — Ligue 188</a>
+    <a href="tel:156" class="help-link">CAPS — Central 156</a>
+  </div>
+</section>
+
+<footer>
+  © 2025 · Conteúdo educativo · Todos os direitos reservados
+</footer>
+
+<script>
+// ── PROGRESS BAR ──
+const bar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  bar.style.width = pct + '%';
+});
+
+// ── INTERSECTION OBSERVER ──
+const sections = document.querySelectorAll('.section, #final');
+const dots = [];
+
+const navEl = document.getElementById('navDots');
+sections.forEach((sec, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot';
+  dot.title = sec.dataset.label || '';
+  dot.addEventListener('click', () => sec.scrollIntoView({ behavior: 'smooth' }));
+  navEl.appendChild(dot);
+  dots.push(dot);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      const idx = Array.from(sections).indexOf(entry.target);
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.15 });
+
+sections.forEach(s => observer.observe(s));
+
+// ── QUIZ ──
+const quizData = [
+  {
+    q: "O álcool é classificado pela OMS como um carcinogênico do Grupo:",
+    opts: ["Grupo 3 — possivelmente cancerígeno", "Grupo 2 — provavelmente cancerígeno", "Grupo 1 — definitivamente cancerígeno", "Sem classificação de risco"],
+    correct: 2,
+    feedback: "Correto! O álcool está no Grupo 1 da IARC/OMS, junto com tabaco e amianto — significa que há evidências suficientes de que causa câncer em humanos."
+  },
+  {
+    q: "Qual parte do cérebro é mais afetada pelo álcool, comprometendo julgamento e tomada de decisão?",
+    opts: ["Cerebelo", "Hipocampo", "Córtex pré-frontal", "Tronco encefálico"],
+    correct: 2,
+    feedback: "Exato! O córtex pré-frontal, responsável por planejamento, controle de impulsos e julgamento, é fortemente inibido pelo álcool."
+  },
+  {
+    q: "O que é a tolerância ao álcool?",
+    opts: ["Sinal de que o fígado está funcionando melhor", "Necessidade de beber mais para sentir os mesmos efeitos — sinal de dano crescente", "Prova de que o corpo se acostumou e ficou mais saudável", "Resultado de boa hidratação durante o consumo"],
+    correct: 1,
+    feedback: "Isso mesmo. Tolerância significa que o sistema nervoso foi alterado — você precisa de mais álcool para o mesmo efeito, o que é um marcador precoce de dependência."
+  },
+  {
+    q: "Qual órgão é o principal responsável por metabolizar o álcool?",
+    opts: ["Rins", "Pâncreas", "Fígado", "Intestino delgado"],
+    correct: 2,
+    feedback: "Correto! O fígado processa cerca de 90% do álcool consumido. O excesso contínuo pode causar esteatose, hepatite alcoólica e cirrose."
+  },
+  {
+    q: "O álcool é um depressor ou estimulante do sistema nervoso central?",
+    opts: ["Estimulante", "Depressor", "Estimulante em baixas doses, depressor em altas", "Nenhum dos dois — age apenas no estômago"],
+    correct: 1,
+    feedback: "O álcool é um depressor do SNC. A sensação inicial de desinibição é causada pela inibição das áreas de autocontrole — não por estimulação."
+  }
+];
+
+let current = 0;
+let answered = false;
+
+function renderQuestion() {
+  const item = quizData[current];
+  document.getElementById('quizQuestion').textContent = `${current + 1}/${quizData.length} — ${item.q}`;
+  const optsEl = document.getElementById('quizOptions');
+  optsEl.innerHTML = '';
+  item.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => answer(i));
+    optsEl.appendChild(btn);
+  });
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').classList.remove('show');
+  document.getElementById('quizNext').classList.remove('show');
+  answered = false;
+}
+
+function answer(idx) {
+  if (answered) return;
+  answered = true;
+  const item = quizData[current];
+  const btns = document.querySelectorAll('.quiz-option');
+  btns[item.correct].classList.add('correct');
+  if (idx !== item.correct) btns[idx].classList.add('wrong');
+  const fb = document.getElementById('quizFeedback');
+  fb.textContent = (idx === item.correct ? '✓ ' : '✗ ') + item.feedback;
+  fb.classList.add('show');
+  if (current < quizData.length - 1) {
+    document.getElementById('quizNext').classList.add('show');
+  } else {
+    document.getElementById('quizNext').textContent = 'Ver resultado';
+    document.getElementById('quizNext').classList.add('show');
+    document.getElementById('quizNext').onclick = () => {
+      document.getElementById('quizWrap').innerHTML = '<p style="color:var(--neon);font-size:1.1rem;line-height:1.7">Parabéns por chegar até aqui. Conhecimento é o primeiro passo para a mudança. Compartilhe o que você aprendeu.</p>';
+    };
+  }
+}
+
+function nextQuestion() {
+  current++;
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
